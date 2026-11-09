@@ -19,6 +19,7 @@
   --code-bg:       #f6f5f1;
   --code-text:     #37332c;
   --ok:            #3a6b3a;
+  --hl:            #fff0a0;   /* 要点のハイライト（mark）。文字は --text のまま */
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "BIZ UDPGothic", "Noto Sans JP", "Yu Gothic UI", Meiryo, sans-serif;
   --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;   /* 表紙の大タイトルだけに使う装飾。読むための文字には使わない */
@@ -117,7 +118,20 @@ main{padding:0 clamp(1.1rem,4vw,4.5rem) 6rem; min-width:0}
 ul,ol{padding-left:1.4rem; margin:0 0 1.1rem}
 li{margin:0 0 .38rem}
 li::marker{color:var(--accent)}
+td ul,td ol{margin:0; padding-left:1.2rem}   /* 表のセル内の箇条書きは余白を詰める */
+td li:last-child{margin-bottom:0}
 strong{font-weight:700}
+mark{background:var(--hl); color:var(--text); padding:.05em .2em; border-radius:var(--radius-s); -webkit-box-decoration-break:clone; box-decoration-break:clone}
+mark code{background:transparent}
+/* コードブロック内の構文色。キーは藍、文字列は橙赤、コメントは灰。意味の区別は色だけに頼らない */
+pre .tok-k{color:var(--ink); font-weight:600}
+pre .tok-s{color:var(--accent)}
+pre .tok-c{color:var(--muted); font-style:italic}
+/* 表の中の判定結果バッジ。拒否は橙赤、実行は藍、確認は無彩色。文字で意味が分かる前提の補助色 */
+.st{display:inline-block; padding:.02em .45em; border-radius:var(--radius-s); font-weight:600; white-space:nowrap}
+.st-deny{background:var(--accent-bg); color:var(--accent)}
+.st-run{background:var(--ink-soft); color:var(--ink)}
+.st-ask{background:var(--surface-2); color:var(--text-soft)}
 a{color:var(--accent); text-underline-offset:2px}
 code{font-family:var(--font-mono); font-size:.86em; background:var(--code-bg); color:var(--code-text); padding:.12em .4em; border-radius:var(--radius-s)}
 pre{
@@ -126,6 +140,13 @@ pre{
   border:1px solid var(--line);
 }
 pre code{background:none; padding:0; font-size:1em}
+/* コードブロックの見出し（ファイル名など）。直後の pre と一体に見せる */
+.code-title{
+  font-family:var(--font-mono); font-size:var(--fs-xs); color:var(--muted); background:var(--surface-2);
+  border:1px solid var(--line); border-bottom:none; border-radius:var(--radius-m) var(--radius-m) 0 0;
+  padding:.35rem .9rem; margin:0;
+}
+.code-title + pre{border-radius:0 0 var(--radius-m) var(--radius-m); margin-top:0}
 
 /* ---------- Tables ---------- */
 .table-scroll{overflow-x:auto; margin:0 0 1.4rem; border:1px solid var(--line); border-radius:var(--radius-m); background:var(--surface)}
@@ -135,6 +156,8 @@ thead th{
   background:var(--surface-2); font-size:var(--fs-xs); letter-spacing:.06em; text-transform:uppercase;
   color:var(--muted); font-weight:700; white-space:nowrap; border-bottom:2px solid var(--line-strong);
 }
+thead th code{text-transform:none; letter-spacing:0; font-size:inherit}   /* 見出しに識別子を置くときは大文字化しない */
+table.keep-first td:first-child{white-space:nowrap}   /* 1 列目が短い見出し語のとき折り返さない */
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover{background:var(--accent-bg)}
 td code{white-space:nowrap}
